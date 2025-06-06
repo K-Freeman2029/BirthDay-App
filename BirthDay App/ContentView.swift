@@ -11,6 +11,8 @@ struct ContentView: View {
     @State private var friends: [Friend] = [
         Friend(name:"Alonnah", birthday: .now),
         Friend(name:"Korra", birthday: Date(timeIntervalSince1970: 0))]
+    @State private var newName = ""
+    @State private var newBirthday =  Date.now
     var body: some View {
         List(friends, id: \.name) { friend in
             HStack {
@@ -20,8 +22,24 @@ struct ContentView: View {
             }
         }
         .navigationTitle("Birthdays")
+        .safeAreaInset(edge: .bottom) {
+            VStack(alignment: .center, spacing: 20) {
+                Text("New Birthday")
+                    .font(.headline)
+                DatePicker(selection: $newBirthday,in:Date.distantPast...Date.now,displayedComponents:.date{
+                    TextField("Name", text: $newName){
+                        .textFieldStyle(.roundedBorder)
+                    }
+                }
+            }
+            friends.append(Friend(name: newName, birthday: newBirthday))
+            newName = ""
+            Text("Add")
+        }
     }
 }
-    #Preview {
-        ContentView()
-    }
+    
+    
+#Preview {
+    ContentView()
+}
